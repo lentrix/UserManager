@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="UserManager:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/UserManager_jar</output-path>
+    <root id="archive" name="UserManager.jar">
+      <element id="module-output" name="UserManager" />
+      <element id="extracted-dir" path="$USER_HOME$/Downloads/sqljdbc_9.4.0.0_enu/sqljdbc_9.4/enu/mssql-jdbc-9.4.0.jre11.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
