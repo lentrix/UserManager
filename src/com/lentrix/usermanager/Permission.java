@@ -1,10 +1,12 @@
 package com.lentrix.usermanager;
 
 public class Permission {
+    private int id;
     private String permission;
     private String remarks;
 
-    public Permission(String permission, String remarks) {
+    public Permission(int id, String permission, String remarks) {
+        this.id = id;
         this.permission = permission;
         this.remarks = remarks;
     }
@@ -23,5 +25,27 @@ public class Permission {
 
     public void setRemarks(String remarks) {
         this.remarks = remarks;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof Permission) {
+            Permission p = (Permission) obj;
+            return p.getId()==this.id && p.getPermission().equalsIgnoreCase(this.permission);
+        }
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        return this.permission;
     }
 }
