@@ -2,6 +2,8 @@ package com.lentrix.usermanager;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Demo {
@@ -34,6 +36,11 @@ public class Demo {
 //            for(Role role: RoleDAO.getAll(connection)) {
 //                System.out.println(role.getRole());
 //            }
+            List<User> users = UserDAO.getAll(connection);
+            for(User user: users) {
+                UserDAO.updatePassword(user, "password123",connection);
+            }
+
         }catch(Exception ex) {
             ex.printStackTrace();
         }

@@ -6,15 +6,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 public class UserDAO {
 
     public static User login(String userName, String password, Connection cxn) throws Exception {
         CallableStatement cs = cxn.prepareCall("{call usrLogin (?,?)}");
         cs.setString(1, userName);
-        cs.setString(2,password);
+        cs.setString(2, Hash.hash(password));
         ResultSet rs = cs.executeQuery();
-
         if(!rs.next()) {
             throw new Exception("Invalid user credentials");
         }
@@ -32,6 +32,24 @@ public class UserDAO {
         ActiveUser.setUser(user);
 
         return user;
+    }
+
+    public static User getUserByUserName(String username, Connection conn) throws SQLException {
+        CallableStatement cs = conn.prepareCall("{call Get_user_by_username (?)}");
+        cs.setString(1, username);
+        ResultSet rs = cs.executeQuery();
+        if(!rs.next()) {
+            throw new SQLException("The user name '" + username + "' cannot be found!");
+        }
+
+        return new User(
+                rs.getInt("id"),
+                rs.getString("username"),
+                rs.getString("fullname"),
+                rs.getString("designation"),
+                rs.getString("phone"),
+                rs.getString("password")
+        );
     }
 
     public static List<Role> getRoles(User user, Connection connection) throws SQLException {
@@ -92,5 +110,27 @@ public class UserDAO {
             ));
         }
         return users;
+    }
+
+    public static void addUser(User user, Connection conn) throws Exception {
+        String passwordHash = Hash.hash(user.getPassword());
+        CallableStatement cs = conn.prepareCall("{call Add_user (?,?,?,?,?)}");
+        cs.setString(1, user.getUserName());
+        cs.setString(2, user.getFullName());
+        cs.setString(3, user.getDesignation());
+        cs.setString(4, user.getPhone());
+        cs.setString(5, passwordHash);
+
+        System.out.println("Password Hash:");
+        System.out.println(passwordHash);
+
+        cs.executeUpdate();
+    }
+
+    public static void updatePassword(User user, String newPassword, Connection conn) throws Exception {
+        CallableStatement cs = conn.prepareCall("{call Change_password (?,?)}");
+        cs.setInt(1, user.getId());
+        cs.setString(2, Hash.hash(newPassword));
+        cs.executeUpdate();
     }
 }

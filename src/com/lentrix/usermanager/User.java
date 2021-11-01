@@ -1,5 +1,7 @@
 package com.lentrix.usermanager;
 
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
 import java.util.List;
 
 public class User {
@@ -8,7 +10,10 @@ public class User {
     private String fullName;
     private String designation;
     private String phone;
+    private String passwordHash;
+    private String password;
     private List<Permission> permissions;
+    private static final String KEY = "ubhc1@securityxc";
 
     public User(int id, String userName, String fullName, String designation, String phone) {
         this.id = id;
@@ -16,6 +21,19 @@ public class User {
         this.fullName = fullName;
         this.designation = designation;
         this.phone = phone;
+    }
+
+    public User(int id, String userName, String fullName, String designation, String phone, String passwordHash) {
+        this(id, userName, fullName, designation, phone);
+        this.passwordHash = passwordHash;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getUserName() {
@@ -75,8 +93,13 @@ public class User {
         return false;
     }
 
+    public String getPasswordHash() {
+        return passwordHash;
+    }
+
     @Override
     public String toString() {
         return this.fullName + " [" + this.userName + "]";
     }
+
 }
