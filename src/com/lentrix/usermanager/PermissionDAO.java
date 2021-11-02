@@ -62,4 +62,18 @@ public class PermissionDAO {
 
         return availablePermissions;
     }
+
+    public static void updatePermission(Permission permission, Connection conn) throws SQLException {
+        CallableStatement cs = conn.prepareCall("{call Update_permission  (?,?,?)}");
+        cs.setInt(1, permission.getId());
+        cs.setString(2, permission.getPermission());
+        cs.setString(3, permission.getRemarks());
+        cs.executeUpdate();
+    }
+
+    public static void removePermission(Permission permission, Connection conn) throws SQLException {
+        CallableStatement cs = conn.prepareCall("{call Remove_permission (?)}");
+        cs.setInt(1, permission.getId());
+        cs.executeUpdate();
+    }
 }

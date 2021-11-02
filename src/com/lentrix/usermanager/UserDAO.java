@@ -133,4 +133,10 @@ public class UserDAO {
         cs.setString(2, Hash.hash(newPassword));
         cs.executeUpdate();
     }
+
+    public static void deleteUser(User user, Connection conn) throws SQLException  {
+        CallableStatement cs = conn.prepareCall("{call Remove_user (?)}");
+        cs.setInt(1, user.getId());
+        cs.executeUpdate();
+    }
 }
